@@ -1,0 +1,12 @@
+<body>
+  Eventname: {{ event_name }}<br>
+  Eventdate: {{ event_date }}<br>
+  Context: {{ context }}<br>
+  <p>
+    Meta:<br>
+    {% for metadata in meta %}
+      {{ metadata.key }}: {{ metadata.value }}<br>
+    {% endfor %}
+  </p>
+  Execution ID: {{ execution_id }}
+</body>

@@ -1,0 +1,23 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "copy:templates": "cp -R extensions/templates build/templates",
+    "copy:migrations": "cp -R extensions/migrations build/migrations",
+  
+    "build:eventticketing:": "cd extensions/eventticketing && npm ci && npm run build",
+    "build:monitoring:": "cd extensions/monitoring && npm ci && npm run build",
+    "build:templates:": "npm run copy:templates",
+    "build:migrations:": "npm run copy:migrations",
+
+    "build": "run-p build:*",
+    "copy": "run-p copy:*"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}

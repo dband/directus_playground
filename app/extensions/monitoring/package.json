@@ -1,0 +1,53 @@
+{
+	"name": "directus-extension-monitoring",
+	"description": "Please enter a description for your extension",
+	"icon": "extension",
+	"version": "1.0.0",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-custom-bundle"
+	],
+	"type": "module",
+	"directus:extension": {
+		"type": "bundle",
+		"path": {
+			"app": "./dist/app.js",
+			"api": "./dist/api.js"
+		},
+		"entries": [
+			{
+				"type": "operation",
+				"name": "initialize_logger",
+				"source": {
+					"app": "src/initialize_logger/app.ts",
+					"api": "src/initialize_logger/api.ts"
+				}
+			},
+			{
+				"type": "operation",
+				"name": "notify_on_error",
+				"source": {
+					"app": "src/notify_on_error/app.ts",
+					"api": "src/notify_on_error/api.ts"
+				}
+			}
+		],
+		"host": "^10.1.9"
+	},
+	"scripts": {
+		"createdist": "mkdir -p ../../build/directus-extension-monitoring/dist",
+		"build": "npm run createdist && directus-extension build && cp package.json ../../build/directus-extension-monitoring/ && cp dist/* ../../build/directus-extension-monitoring/dist/",
+		"dev": "nodemon copy-files.js & directus-extension build -w --no-minify",
+		"link": "directus-extension link",
+		"add": "directus-extension add && npm install nodemon fs-extra --save-dev"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "10.1.9",
+		"@types/node": "^20.6.2",
+		"fs-extra": "^11.1.1",
+		"nodemon": "^3.0.1",
+		"typescript": "^5.2.2",
+		"vue": "^3.3.4"
+	}
+}

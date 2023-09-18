@@ -1,0 +1,66 @@
+version: '3'
+services:
+  database:
+    image: postgis/postgis:15-master
+    # Required when running on platform other than amd64, like Apple M1/M2:
+    platform: linux/amd64
+    environment:
+      POSTGRES_USER: 'directus'
+      POSTGRES_PASSWORD: 'directus'
+      POSTGRES_DB: 'directus'
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certs:/etc/nginx/certs
+    depends_on:
+      - directus
+
+  directus:
+    image: directus/directus:10.6.1
+    ports:
+      - 8055:8055
+    volumes:
+    - ./certs:/directus/certs
+    - ./build:/directus/extensions
+    depends_on:
+      - database
+    environment:
+      KEY: '255d861b-5ea1-5996-9aa3-922530ec40b1'
+      SECRET: '6116487b-cda1-52c2-b5b5-c8022c45e263'
+
+      DB_CLIENT: 'pg'
+      DB_HOST: 'database'
+      DB_PORT: '5432'
+      DB_DATABASE: 'directus'
+      DB_USER: 'directus'
+      DB_PASSWORD: 'directus' # Keep it secret
+
+      CACHE_ENABLED: 'false'
+
+      ADMIN_EMAIL: 'admin@example.com'
+      ADMIN_PASSWORD: 'admin'
+
+      # Fill in with whatever you have
+      # Remeber to keep credentials secret in production
+      # EMAIL_TRANSPORT: 
+
+      EXTENSIONS_AUTO_RELOAD: 'true'
+
+      VONAGE_BASE_URL: https://api.nexmo.com
+      # You should set these in a secrets file or somewhere in your ci/cd pipeline
+      # See https://docs.directus.io/self-hosted/config-options.html#environment-variable-files
+      VONAGE_API_KEY: 'xxxx'
+      VONAGE_API_SECRET: 'yyyyy'
+
+      WEBSOCKETS_ENABLED: true
+      WEBSOCKETS_GRAPHQL_ENABLED: false
+      WEBSOCKETS_REST_AUTH: public
+      WEBSOCKETS_HEARTBEAT_PERIOD: 20
+      WEBSOCKETS_REST_AUTH_TIMEOUT: 10
+
+      PUBLIC_URL: https://localhost

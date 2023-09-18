@@ -1,0 +1,79 @@
+{
+    "uuid": "9308a0ed-5bea-4ff8-b91d-1d0d85e4dd7f",
+    "lastMigration": 28,
+    "name": "Vonage",
+    "endpointPrefix": "",
+    "latency": 0,
+    "port": 8050,
+    "hostname": "",
+    "folders": [],
+    "routes": [
+        {
+            "uuid": "e730458c-91f8-4b27-8e25-4c86cbaea21d",
+            "type": "http",
+            "documentation": "",
+            "method": "post",
+            "endpoint": "ni/basic/json",
+            "responses": [
+                {
+                    "uuid": "baf7e205-7f6f-41ef-8195-88f95837ab68",
+                    "body": "{}",
+                    "latency": 0,
+                    "statusCode": 200,
+                    "label": "",
+                    "headers": [],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": true,
+                    "crudKey": "id"
+                }
+            ],
+            "enabled": true,
+            "responseMode": null
+        }
+    ],
+    "rootChildren": [
+        {
+            "type": "route",
+            "uuid": "e730458c-91f8-4b27-8e25-4c86cbaea21d"
+        }
+    ],
+    "proxyMode": false,
+    "proxyHost": "",
+    "proxyRemovePrefix": false,
+    "tlsOptions": {
+        "enabled": false,
+        "type": "CERT",
+        "pfxPath": "",
+        "certPath": "",
+        "keyPath": "",
+        "caPath": "",
+        "passphrase": ""
+    },
+    "cors": true,
+    "headers": [
+        {
+            "key": "Content-Type",
+            "value": "application/json"
+        }
+    ],
+    "proxyReqHeaders": [
+        {
+            "key": "",
+            "value": ""
+        }
+    ],
+    "proxyResHeaders": [
+        {
+            "key": "",
+            "value": ""
+        }
+    ],
+    "data": []
+}

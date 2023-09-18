@@ -1,0 +1,55 @@
+{
+	"name": "directus-extension-eventticketing",
+	"version": "1.0.0",
+	"type": "module",
+	"dependencies": {
+		"@directus/errors": "^0.0.2",
+		"@directus/types": "^10.1.5",
+		"handlebars": "^4.7.8"
+	},
+	"directus:extension": {
+		"host": "^10.1.9",
+		"type": "bundle",
+		"path": {
+			"app": "./dist/app.js",
+			"api": "./dist/api.js"
+		},
+		"entries": [
+			{
+				"type": "endpoint",
+				"name": "events",
+				"source": "src/events/index.ts"
+			},
+			{
+				"type": "operation",
+				"name": "call_vonage_api",
+				"source": {
+					"app": "src/call_vonage_api/app.ts",
+					"api": "src/call_vonage_api/api.ts"
+				}
+			}
+		]
+	},
+	"description": "Please enter a description for your extension",
+	"icon": "extension",
+	"keywords": [
+		"directus",
+		"directus-extension",
+		"directus-custom-bundle"
+	],
+	"scripts": {
+		"createdist": "mkdir -p ../../build/directus-extension-eventticketing/dist",
+		"build": "npm run createdist && directus-extension build && cp package.json ../../build/directus-extension-eventticketing/ && cp dist/* ../../build/directus-extension-eventticketing/dist/",
+		"dev": "nodemon copy-files.js & directus-extension build -w --no-minify",
+		"link": "directus-extension link",
+		"add": "directus-extension add && npm install nodemon fs-extra --save-dev"
+	},
+	"devDependencies": {
+		"@directus/extensions-sdk": "10.1.9",
+		"@types/node": "^20.6.2",
+		"fs-extra": "^11.1.1",
+		"nodemon": "^3.0.1",
+		"typescript": "^5.2.2",
+		"vue": "^3.3.4"
+	}
+}
