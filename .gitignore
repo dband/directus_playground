@@ -1,6 +1,8 @@
 .DS_Store
 .vs_code
 
+**/secrets.env
+
 **/node_modules
 app/build
 
