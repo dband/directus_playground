@@ -1,5 +1,118 @@
 [
     {
+        "id": "549f177f-3e3b-4166-809e-5cc0c324bb78",
+        "name": "Create log event",
+        "icon": "bolt",
+        "color": null,
+        "description": null,
+        "status": "active",
+        "trigger": "operation",
+        "accountability": "all",
+        "options": {
+            "return": "$last"
+        },
+        "operation": "03d98f05-71b5-497d-a7e5-4300e756fc4f",
+        "date_created": "2023-09-19T01:23:38.975Z",
+        "operations": [
+            {
+                "id": "03d98f05-71b5-497d-a7e5-4300e756fc4f",
+                "name": "Parse metadata and event date",
+                "key": "parse_metadata_and_event_date",
+                "type": "exec",
+                "position_x": 18,
+                "position_y": 1,
+                "options": {
+                    "code": "module.exports = async function(data) {\n    let meta = {};\n\tconst metaArray = data.$trigger.meta;\n    \n    if (Array.isArray(metaArray)) {\n    \tmeta = metaArray.reduce((agg,m) => {\n    \t\treturn {...agg, ...m};\n    \t}, {});\n    }\n\n    return {\n        \"now\": (new Date()).toISOString(),\n        \"meta\": meta\n    };\n}"
+                },
+                "resolve": "925e7802-fb1f-4a93-a236-8b52c6d180fc",
+                "reject": null,
+                "flow": "549f177f-3e3b-4166-809e-5cc0c324bb78",
+                "date_created": "2023-09-19T01:23:39.052Z"
+            },
+            {
+                "id": "925e7802-fb1f-4a93-a236-8b52c6d180fc",
+                "name": "Create event payload",
+                "key": "create_event_payload",
+                "type": "transform",
+                "position_x": 35,
+                "position_y": 1,
+                "options": {
+                    "json": {
+                        "event_name": "{{$trigger.event_name}}",
+                        "event_date": "{{$last.now}}",
+                        "context": "{{$trigger.context}}",
+                        "execution_id": "{{$trigger.uuid}}",
+                        "meta": "{{$last.meta}}"
+                    }
+                },
+                "resolve": "d9113bb5-af75-4795-880c-8925a6fd1e83",
+                "reject": null,
+                "flow": "549f177f-3e3b-4166-809e-5cc0c324bb78",
+                "date_created": "2023-09-19T01:23:39.027Z"
+            },
+            {
+                "id": "d9113bb5-af75-4795-880c-8925a6fd1e83",
+                "name": "Log event",
+                "key": "log_event",
+                "type": "item-create",
+                "position_x": 52,
+                "position_y": 1,
+                "options": {
+                    "collection": "event_logs",
+                    "permissions": "$full",
+                    "emitEvents": true,
+                    "payload": "{{$last}}"
+                },
+                "resolve": null,
+                "reject": null,
+                "flow": "549f177f-3e3b-4166-809e-5cc0c324bb78",
+                "date_created": "2023-09-19T01:23:39.002Z"
+            }
+        ]
+    },
+    {
+        "id": "32faa5ef-edd8-45ff-a108-8ca372e35a1b",
+        "name": "Notify on event",
+        "icon": "error",
+        "color": "#FF5848",
+        "description": "Alert given addresses on specific events",
+        "status": "active",
+        "trigger": "event",
+        "accountability": "all",
+        "options": {
+            "type": "action",
+            "scope": [
+                "items.create"
+            ],
+            "collections": [
+                "event_logs"
+            ]
+        },
+        "operation": "50e58847-1755-4402-aba3-4d482012baee",
+        "date_created": "2023-09-19T01:23:39.077Z",
+        "operations": [
+            {
+                "id": "50e58847-1755-4402-aba3-4d482012baee",
+                "name": "Notify on error",
+                "key": "notify_on_error",
+                "type": "notify_on_error",
+                "position_x": 19,
+                "position_y": 1,
+                "options": {
+                    "to": [],
+                    "events": [
+                        "phone-number-validation-failed",
+                        "reservation-request-denied"
+                    ]
+                },
+                "resolve": null,
+                "reject": null,
+                "flow": "32faa5ef-edd8-45ff-a108-8ca372e35a1b",
+                "date_created": "2023-09-19T01:23:39.103Z"
+            }
+        ]
+    },
+    {
         "id": "321374e8-3822-4a53-84cc-b2ecd32887ce",
         "name": "Process reservation",
         "icon": "bolt",
@@ -11,15 +124,33 @@
         "options": {
             "return": ""
         },
-        "operation": "b6083af0-a24c-4837-bd1f-0fccced66d7b",
+        "operation": "93bda332-6a58-466d-896a-c4f31173ef81",
         "date_created": "2023-09-16T11:57:13.941Z",
         "operations": [
+            {
+                "id": "93bda332-6a58-466d-896a-c4f31173ef81",
+                "name": "Init Logger",
+                "key": "init_logger",
+                "type": "initialize_logger",
+                "position_x": 18,
+                "position_y": 1,
+                "options": {
+                    "metaData": {
+                        "reservation": "{{$trigger.payload}}"
+                    },
+                    "loggingContext": "process_reservation"
+                },
+                "resolve": "b6083af0-a24c-4837-bd1f-0fccced66d7b",
+                "reject": null,
+                "flow": "321374e8-3822-4a53-84cc-b2ecd32887ce",
+                "date_created": "2023-09-19T01:12:12.614Z"
+            },
             {
                 "id": "b6083af0-a24c-4837-bd1f-0fccced66d7b",
                 "name": "Fetch event",
                 "key": "fetch_event",
                 "type": "item-read",
-                "position_x": 19,
+                "position_x": 35,
                 "position_y": 1,
                 "options": {
                     "collection": "events",
@@ -38,7 +169,7 @@
                 "name": "Condition",
                 "key": "condition_83wu5",
                 "type": "condition",
-                "position_x": 37,
+                "position_x": 52,
                 "position_y": 1,
                 "options": {
                     "filter": {
@@ -59,7 +190,7 @@
                 "name": "Mark request as denied",
                 "key": "mark_request_as_denied",
                 "type": "item-update",
-                "position_x": 54,
+                "position_x": 52,
                 "position_y": 17,
                 "options": {
                     "collection": "reservation_requests",
@@ -70,17 +201,38 @@
                         "status": "denied"
                     }
                 },
-                "resolve": null,
+                "resolve": "95c0dca3-0c04-4bb5-a789-342da36e52e6",
                 "reject": null,
                 "flow": "321374e8-3822-4a53-84cc-b2ecd32887ce",
                 "date_created": "2023-09-16T13:36:10.110Z"
+            },
+            {
+                "id": "95c0dca3-0c04-4bb5-a789-342da36e52e6",
+                "name": "Log request denied event",
+                "key": "log_request_denied_event",
+                "type": "trigger",
+                "position_x": 69,
+                "position_y": 17,
+                "options": {
+                    "flow": "549f177f-3e3b-4166-809e-5cc0c324bb78",
+                    "payload": {
+                        "event_name": "request-denied",
+                        "context": "{{init_logger.context}}",
+                        "execution_id": "{{init_logger.uuid}}",
+                        "meta": "{{init_logger.meta}}"
+                    }
+                },
+                "resolve": null,
+                "reject": null,
+                "flow": "321374e8-3822-4a53-84cc-b2ecd32887ce",
+                "date_created": "2023-09-19T01:26:24.461Z"
             },
             {
                 "id": "d9a2ba2d-aaf4-4c61-aa70-32e7dfd5d627",
                 "name": "Create payload",
                 "key": "create_payload",
                 "type": "transform",
-                "position_x": 54,
+                "position_x": 69,
                 "position_y": 1,
                 "options": {
                     "json": {
@@ -100,7 +252,7 @@
                 "name": "Create participant",
                 "key": "create_participant",
                 "type": "item-create",
-                "position_x": 71,
+                "position_x": 86,
                 "position_y": 1,
                 "options": {
                     "collection": "participants",
@@ -117,7 +269,7 @@
                 "name": "Mark request as success",
                 "key": "mark_request_as_success",
                 "type": "item-update",
-                "position_x": 88,
+                "position_x": 103,
                 "position_y": 1,
                 "options": {
                     "collection": "reservation_requests",
@@ -206,38 +358,102 @@
                 "participants"
             ]
         },
-        "operation": "fd0277cf-aed8-4005-b6b3-99e4119365cb",
+        "operation": "ec825302-d3ac-43c4-85ff-ee9837f0143e",
         "date_created": "2023-09-11T01:31:55.423Z",
         "operations": [
             {
-                "id": "fd0277cf-aed8-4005-b6b3-99e4119365cb",
-                "name": "Call Vonage API",
-                "key": "call_vonage_api_bopm7",
-                "type": "call_vonage_api",
-                "position_x": 19,
+                "id": "ec825302-d3ac-43c4-85ff-ee9837f0143e",
+                "name": "Init logger",
+                "key": "init_logger",
+                "type": "initialize_logger",
+                "position_x": 18,
                 "position_y": 1,
                 "options": {
-                    "endpoint": "/ni/basic",
+                    "loggingContext": "validate_phone_number",
+                    "metaData": {
+                        "participant": "{{$trigger.payload}}"
+                    }
+                },
+                "resolve": "fd0277cf-aed8-4005-b6b3-99e4119365cb",
+                "reject": null,
+                "flow": "e20793a7-2009-4122-9ef6-2536a3de7ab8",
+                "date_created": "2023-09-19T02:26:17.804Z"
+            },
+            {
+                "id": "fd0277cf-aed8-4005-b6b3-99e4119365cb",
+                "name": "Call Vonage API",
+                "key": "call_vonage_api",
+                "type": "call_vonage_api",
+                "position_x": 35,
+                "position_y": 1,
+                "options": {
+                    "endpoint": "ni/basic",
                     "queryString": "number={{$trigger.payload.phone}}"
+                },
+                "resolve": "bf58a4d9-e3ea-4b83-bf6f-564721153df7",
+                "reject": "d9449771-e9a9-4177-90ff-a809669fa2d3",
+                "flow": "e20793a7-2009-4122-9ef6-2536a3de7ab8",
+                "date_created": "2023-09-11T01:55:07.398Z"
+            },
+            {
+                "id": "d9449771-e9a9-4177-90ff-a809669fa2d3",
+                "name": "Add vonage error to log meta",
+                "key": "add_vonage_error_to_log_meta",
+                "type": "exec",
+                "position_x": 52,
+                "position_y": 17,
+                "options": {
+                    "code": "module.exports = async function(data) {\n    return {\n        \"event_name\": \"phone-number-validation-failed\",\n        \"context\": data.init_logger.context,\n        \"execution_id\": data.init_logger.uuid,\n        \"meta\": {error: data.$last.message, ...data.init_logger.meta}\n\t}\n}"
+                },
+                "resolve": "05e7a88c-32c6-4002-bb28-2cbe7a9dbdfd",
+                "reject": null,
+                "flow": "e20793a7-2009-4122-9ef6-2536a3de7ab8",
+                "date_created": "2023-09-19T04:22:40.300Z"
+            },
+            {
+                "id": "05e7a88c-32c6-4002-bb28-2cbe7a9dbdfd",
+                "name": "Log Vonage error",
+                "key": "log_vonage_error",
+                "type": "trigger",
+                "position_x": 69,
+                "position_y": 17,
+                "options": {
+                    "flow": "549f177f-3e3b-4166-809e-5cc0c324bb78",
+                    "payload": "{{$last}}"
+                },
+                "resolve": null,
+                "reject": null,
+                "flow": "e20793a7-2009-4122-9ef6-2536a3de7ab8",
+                "date_created": "2023-09-19T02:30:18.067Z"
+            },
+            {
+                "id": "bf58a4d9-e3ea-4b83-bf6f-564721153df7",
+                "name": "Prepare update Ids",
+                "key": "prepare_update_ids",
+                "type": "exec",
+                "position_x": 52,
+                "position_y": 1,
+                "options": {
+                    "code": "module.exports = async function(data) {\n\treturn {\"keys\": data.$trigger.keys ?? data.$trigger.key};\n}"
                 },
                 "resolve": "3c1641f4-4d7d-4494-bef8-35d5155485fa",
                 "reject": null,
                 "flow": "e20793a7-2009-4122-9ef6-2536a3de7ab8",
-                "date_created": "2023-09-11T01:55:07.398Z"
+                "date_created": "2023-09-19T04:10:26.852Z"
             },
             {
                 "id": "3c1641f4-4d7d-4494-bef8-35d5155485fa",
                 "name": "Update Data",
                 "key": "item_update_gh1dg",
                 "type": "item-update",
-                "position_x": 37,
+                "position_x": 69,
                 "position_y": 1,
                 "options": {
-                    "collection": "invites",
+                    "collection": "participants",
                     "payload": {
-                        "phone": "{{$last.data.international_format_number}}"
+                        "phone": "{{call_vonage_api.international_format_number}}"
                     },
-                    "key": "{{$trigger.payload.keys}}"
+                    "key": "{{$last.keys}}"
                 },
                 "resolve": null,
                 "reject": null,
