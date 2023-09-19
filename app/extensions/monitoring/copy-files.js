@@ -1,7 +1,7 @@
 import fs  from 'fs-extra';
 
 const sourceFolder = './dist'; // Replace with your source folder path
-const destinationFolder = '../../build/directus-extension-eventticketing/dist'; // Replace with your destination folder path
+const destinationFolder = '../../build/directus-extension-monitoring/dist'; // Replace with your destination folder path
 
 // Function to copy files from source to destination folder
 function copyFiles() {

@@ -5,6 +5,7 @@ services:
     # Required when running on platform other than amd64, like Apple M1/M2:
     platform: linux/amd64
     environment:
+      # Remeber to keep credentials secret in production
       POSTGRES_USER: 'directus'
       POSTGRES_PASSWORD: 'directus'
       POSTGRES_DB: 'directus'
@@ -36,26 +37,24 @@ services:
       DB_CLIENT: 'pg'
       DB_HOST: 'database'
       DB_PORT: '5432'
+      # Remeber to keep credentials secret in production
       DB_DATABASE: 'directus'
       DB_USER: 'directus'
-      DB_PASSWORD: 'directus' # Keep it secret
+      DB_PASSWORD: 'directus'
 
       CACHE_ENABLED: 'false'
 
+      # Remeber to keep credentials secret in production
       ADMIN_EMAIL: 'admin@example.com'
       ADMIN_PASSWORD: 'admin'
 
       # Fill in with whatever you have
       # Remeber to keep credentials secret in production
-      # EMAIL_TRANSPORT: 
+      EMAIL_TRANSPORT: smtp
 
       EXTENSIONS_AUTO_RELOAD: 'true'
 
       VONAGE_BASE_URL: https://api.nexmo.com
-      # You should set these in a secrets file or somewhere in your ci/cd pipeline
-      # See https://docs.directus.io/self-hosted/config-options.html#environment-variable-files
-      VONAGE_API_KEY: 'xxxx'
-      VONAGE_API_SECRET: 'yyyyy'
 
       WEBSOCKETS_ENABLED: true
       WEBSOCKETS_GRAPHQL_ENABLED: false
@@ -64,3 +63,9 @@ services:
       WEBSOCKETS_REST_AUTH_TIMEOUT: 10
 
       PUBLIC_URL: https://localhost
+    env_file:
+    # Should contain 
+    # VONAGE_API_KEY: 'xxxx'
+    # VONAGE_API_SECRET: 'yyyyy'
+    # Configure email
+    - secrets.env

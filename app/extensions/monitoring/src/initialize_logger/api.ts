@@ -18,7 +18,6 @@ export default defineOperationApi<Options>({
 			)
 
 		metaData = mapValuesDeep(metaData, function(val, key, obj) {
-			logger.info(key);
 			if (key == 'password') {
 				val = '*****'
 			}

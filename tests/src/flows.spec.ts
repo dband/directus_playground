@@ -42,7 +42,6 @@ function sleep(ms) {
 }
 
 function linkToFlow(id) {
-    console.log(`${DIRECTUS_URL}/revisions?filter[item]=${id}`)
     return `${DIRECTUS_URL}/revisions?filter[item]=${id}`;
 }
 
