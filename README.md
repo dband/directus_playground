@@ -7,6 +7,9 @@ This template shows my current approach to monitor and test applications build w
 > [!IMPORTANT]
 > You'll need a [Vonage developer account](https://developer.vonage.com/en/home)
 
+> [!NOTE] 
+> On Windows, you will need WSL!
+
 ## Project structure
 Each subheading represents a folder in this repository.
 
@@ -62,6 +65,9 @@ Contains all [Playwright](https://playwright.dev/) integration and end-2-end tes
 > [!IMPORTANT] 
 > You'll need to run 'npm install' in the utils package and build the extensions. Like explained below.
 
+> [!NOTE] 
+> In case you changed Vonage.json or the mock configuration in general and your endpoint is returning the wrong results you have to `docker compose stop mockoon`  and run `docker compose up -d` again.
+
 Setup
 1. `cd utils && npm install`
 2. `cd ../app && npm run build`
@@ -71,8 +77,6 @@ Setup
 6. `npm test`
 
 **Troubleshooting**
-
-- If you are on Windows, you will need WSL
 - In WSL, the script might fail on line 108 of the setup.js script  
   - `await exec('docker compose cp ../../app/build/. directus:/directus/extensions');`
   - Somehow it's not possible to copy the folder to the container if it is in a sub dir. Change the command to: `await exec('docker compose cp app/build/. directus:/directus/extensions');` and execute the script from the root dir of the project

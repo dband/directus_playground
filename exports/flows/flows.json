@@ -41,7 +41,7 @@
                         "event_name": "{{$trigger.event_name}}",
                         "event_date": "{{$last.now}}",
                         "context": "{{$trigger.context}}",
-                        "execution_id": "{{$trigger.uuid}}",
+                        "execution_id": "{{$trigger.execution_id}}",
                         "meta": "{{$last.meta}}"
                     }
                 },
@@ -99,7 +99,9 @@
                 "position_x": 19,
                 "position_y": 1,
                 "options": {
-                    "to": [],
+                    "to": [
+                        "admin@localhost"
+                    ],
                     "events": [
                         "phone-number-validation-failed",
                         "reservation-request-denied"
@@ -136,7 +138,7 @@
                 "position_y": 1,
                 "options": {
                     "metaData": {
-                        "reservation": "{{$trigger.payload}}"
+                        "reservation": "{{$trigger}}"
                     },
                     "loggingContext": "process_reservation"
                 },
@@ -216,7 +218,7 @@
                 "options": {
                     "flow": "549f177f-3e3b-4166-809e-5cc0c324bb78",
                     "payload": {
-                        "event_name": "request-denied",
+                        "event_name": "reservation-request-denied",
                         "context": "{{init_logger.context}}",
                         "execution_id": "{{init_logger.uuid}}",
                         "meta": "{{init_logger.meta}}"

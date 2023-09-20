@@ -26,8 +26,8 @@ services:
     ports:
     - "8050:8050"
     volumes: 
-    - ./mockoon/Vonage.json:/data1
-
+    - ./mockoon/Vonage.json:/data1:readonly
+  
   directus:
     image: directus/directus:10.6.1
     ports:

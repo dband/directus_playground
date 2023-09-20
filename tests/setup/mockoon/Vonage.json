@@ -11,17 +11,53 @@
         {
             "uuid": "e730458c-91f8-4b27-8e25-4c86cbaea21d",
             "type": "http",
-            "documentation": "",
-            "method": "post",
+            "documentation": "Validates a given phone number. Insert number into query string ?number=123",
+            "method": "get",
             "endpoint": "ni/basic/json",
             "responses": [
                 {
                     "uuid": "baf7e205-7f6f-41ef-8195-88f95837ab68",
-                    "body": "{}",
+                    "body": "{\n  \"status\": 0,\n  \"status_message\": \"Success\",\n  \"request_id\": \"aaaaaaaa-bbbb-cccc-dddd-0123456789ab\",\n  \"international_format_number\": \"{{substr (queryParam 'number') 2}}\",\n  \"national_format_number\": \"{{concat \"0\" (substr (queryParam 'number') 4)}}\",\n  \"country_code_iso3\": \"DE\",\n  \"country_name\": \"Germany\",\n  \"country_prefix\": \"49\"\n }",
                     "latency": 0,
                     "statusCode": 200,
-                    "label": "",
-                    "headers": [],
+                    "label": "Success",
+                    "headers": [
+                        {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [
+                        {
+                            "target": "query",
+                            "modifier": "number",
+                            "value": "0049\\d{10}",
+                            "invert": false,
+                            "operator": "regex_i"
+                        }
+                    ],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": false,
+                    "crudKey": "id"
+                },
+                {
+                    "uuid": "9170393b-f1e7-48f8-a4ef-e28e371033d0",
+                    "body": "{\n  \"status\": 3,\n  \"status_message\": \"Invalid request :: Not valid number format detected [ {{queryParam 'number'}} ]\"\n}",
+                    "latency": 0,
+                    "statusCode": 200,
+                    "label": "Invalid",
+                    "headers": [
+                        {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ],
                     "bodyType": "INLINE",
                     "filePath": "",
                     "databucketID": "",
