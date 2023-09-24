@@ -6,7 +6,7 @@ type Options = {
 };
 
 export default defineOperationApi<Options>({
-	id: 'notify_on_error',
+	id: 'notify_on_event',
 	handler: async ({ to, events }, { getSchema, database, services, accountability, logger, data }) => {
 		const trigger: any = data.$trigger;
 
@@ -25,7 +25,7 @@ export default defineOperationApi<Options>({
         
 		await mailService.send({
 			to: to,
-			subject: `Directus - Ein Fehler ist aufgetreten - ${payload.event_name}`,
+			subject: `Directus Event - ${payload.event_name}`,
 			template: {
 				name: 'event-notification',
 				data: payload,

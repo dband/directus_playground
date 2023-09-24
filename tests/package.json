@@ -4,8 +4,7 @@
   "type": "module",
   "description": "",
   "main": "index.js",
-  "author": "",
-  "license": "ISC",
+  "author": "Daniel Band",
   "scripts": {
     "test": "npx playwright test"
   },

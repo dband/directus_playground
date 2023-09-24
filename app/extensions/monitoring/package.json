@@ -28,8 +28,8 @@
 				"type": "operation",
 				"name": "notify_on_error",
 				"source": {
-					"app": "src/notify_on_error/app.ts",
-					"api": "src/notify_on_error/api.ts"
+					"app": "src/notify_on_event/app.ts",
+					"api": "src/notify_on_event/api.ts"
 				}
 			}
 		],

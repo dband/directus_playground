@@ -16,46 +16,25 @@
         "operations": [
             {
                 "id": "03d98f05-71b5-497d-a7e5-4300e756fc4f",
-                "name": "Parse metadata and event date",
-                "key": "parse_metadata_and_event_date",
+                "name": "Create event payload",
+                "key": "create_event_payload",
                 "type": "exec",
                 "position_x": 18,
                 "position_y": 1,
                 "options": {
-                    "code": "module.exports = async function(data) {\n    let meta = {};\n\tconst metaArray = data.$trigger.meta;\n    \n    if (Array.isArray(metaArray)) {\n    \tmeta = metaArray.reduce((agg,m) => {\n    \t\treturn {...agg, ...m};\n    \t}, {});\n    }\n\n    return {\n        \"now\": (new Date()).toISOString(),\n        \"meta\": meta\n    };\n}"
-                },
-                "resolve": "925e7802-fb1f-4a93-a236-8b52c6d180fc",
-                "reject": null,
-                "flow": "549f177f-3e3b-4166-809e-5cc0c324bb78",
-                "date_created": "2023-09-19T01:23:39.052Z"
-            },
-            {
-                "id": "925e7802-fb1f-4a93-a236-8b52c6d180fc",
-                "name": "Create event payload",
-                "key": "create_event_payload",
-                "type": "transform",
-                "position_x": 35,
-                "position_y": 1,
-                "options": {
-                    "json": {
-                        "event_name": "{{$trigger.event_name}}",
-                        "event_date": "{{$last.now}}",
-                        "context": "{{$trigger.context}}",
-                        "execution_id": "{{$trigger.execution_id}}",
-                        "meta": "{{$last.meta}}"
-                    }
+                    "code": "module.exports = async function(data) {    \n    return {\n        \"event_name\": data.$trigger.event_name,\n        \"event_date\": (new Date()).toISOString(),\n        \"context\": data.$trigger.context,\n        \"execution_id\": data.$trigger.execution_id,\n        \"meta\": data.$trigger.meta\n    };\n}"
                 },
                 "resolve": "d9113bb5-af75-4795-880c-8925a6fd1e83",
                 "reject": null,
                 "flow": "549f177f-3e3b-4166-809e-5cc0c324bb78",
-                "date_created": "2023-09-19T01:23:39.027Z"
+                "date_created": "2023-09-19T01:23:39.052Z"
             },
             {
                 "id": "d9113bb5-af75-4795-880c-8925a6fd1e83",
                 "name": "Log event",
                 "key": "log_event",
                 "type": "item-create",
-                "position_x": 52,
+                "position_x": 35,
                 "position_y": 1,
                 "options": {
                     "collection": "event_logs",
@@ -93,9 +72,9 @@
         "operations": [
             {
                 "id": "50e58847-1755-4402-aba3-4d482012baee",
-                "name": "Notify on error",
-                "key": "notify_on_error",
-                "type": "notify_on_error",
+                "name": "Notify by mail",
+                "key": "notify_by_mail",
+                "type": "notify_on_event",
                 "position_x": 19,
                 "position_y": 1,
                 "options": {

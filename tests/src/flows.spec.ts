@@ -177,21 +177,19 @@ test.describe('given a list of events', () => {
         });
     
         test('an event has reached maximum capacity', async ({ page }) => {
-            await db('reservation_requests').insert(
-                {
-                    id: faker.string.uuid(),
-                    name: faker.person.fullName(),
-                    email: faker.internet.email(),
-                    phone: faker.phone.number(),
-                    event: eventZeroCapacity
-                }
-            );
+            const request = {
+                id: faker.string.uuid(),
+                name: faker.person.fullName(),
+                email: faker.internet.email(),
+                phone: faker.phone.number(),
+                event: eventZeroCapacity
+            };
+            
+            await db('reservation_requests').insert(request);
     
             await page.goto(`${DIRECTUS_URL}/admin/content/reservation_requests`, {
                 waitUntil: "networkidle"
                 });
-            
-            await page.screenshot({ path: 'screenshot.png' });
     
             await openFlowsSidebar(page);
     
@@ -238,6 +236,21 @@ test.describe('given a list of events', () => {
 
             const eventLogData = await adminClient('/items/event_logs');
             expect(eventLogData.data.data.length).toBe(1);
+            expect(eventLogData.data.data).toMatchObject([
+                {
+                    id: expect.any(String),
+                    context: 'process_reservation',
+                    event_name: 'reservation-request-denied',
+                    event_date: expect.any(String),
+                    meta: {
+                        reservation: {...request, ...{
+                            id: expect.any(String),
+                            status: 'processing',
+                            date_created: null
+                        }}
+                    }
+                }
+            ]);
 
             const messages = await mailhog('/api/v2/search?kind=containing&query=reservation-request-denied');
             expect(messages.data.count).toBe(1);

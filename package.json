@@ -1,0 +1,11 @@
+{
+  "name": "directus_playground",
+  "version": "1.0.0",
+  "description": "This template shows my current approach to monitor and test applications build with directus, especially flows and extensions. This repo simulates a simple event ticketing system by using Directus extensions/flows, Handlebars.js, Websockets and Vonage. No SPA framework needed. The testing is done with Playwright.",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm ci --prefix ./utils && npm ci --prefix ./app && npm run build --prefix ./app && npm install --prefix ./tests"
+  },
+  "author": "Daniel Band",
+  "license": "The Unlicense"
+}

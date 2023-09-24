@@ -1,10 +1,10 @@
 import { defineOperationApp } from '@directus/extensions-sdk';
 
 export default defineOperationApp({
-	id: 'notify_on_error',
-	name: 'Notify on error',
+	id: 'notify_on_event',
+	name: 'Notify on event',
 	icon: 'box',
-	description: 'Sends out error emails. Must be paired with an event hook of type action.',
+	description: 'Sends out event emails. Must be paired with an event hook of type action.',
 	overview: ({ to, events }) => [
 		{
 			label: 'To',
